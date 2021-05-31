@@ -139,30 +139,17 @@ namespace robot
     auto MoveJoint::executeRT()->int
     {
         // pos //
-//        static double begin_pos;
-//        if (count() == 1)
-//        {
-//            begin_pos = controller()->motionPool()[0].actualPos();
-//        }
-//        TCurve s1(0.3,0.2);
-//        s1.getCurveParam();
-//        double pos = begin_pos + dir_  * PI* s1.getTCurve(count());
-//        controller()->motionPool()[0].setTargetPos(pos);
-
-
-//        // vel //
-        static double vel=0;
+        static double begin_pos;
+        if (count() == 1)
+        {
+            begin_pos = controller()->motionPool()[0].actualPos();
+            std::cout << begin_pos << std::endl;
+        }
         TCurve s1(5,2);
         s1.getCurveParam();
-        vel = this->controller()->motionPool()[0].actualVel();
-        controller()->motionPool()[0].setTargetVel(dir_ * s1.getTCurve(count()));
+        double pos = begin_pos + dir_  * PI* s1.getTCurve(count());
 
-
-
-        int16_t torque;
-        this->ecController()->motionPool()[0].readPdo(0x6077,0x00,torque);
-        mout() <<"torque=" <<  torque <<"\t"<< "vel=" <<vel << std::endl;
-
+        controller()->motionPool()[0].setTargetPos(pos);
         return s1.getTc() *1000 -count();
     }
     auto MoveJoint::collectNrt()->void {}
@@ -175,12 +162,11 @@ namespace robot
     }
 
 
+
+
 auto createControllerQuadruped()->std::unique_ptr<aris::control::Controller>
 {
     std::unique_ptr<aris::control::Controller> controller(new aris::control::EthercatController);
-
-
-
 
     for (aris::Size i = 0; i < 1; ++i)
     {
@@ -192,30 +178,39 @@ auto createControllerQuadruped()->std::unique_ptr<aris::control::Controller>
 #else
         double pos_offset[2]
         {
-          0
+         //  1.900100
+
         };
 #endif
         double pos_factor[2]
         {
-            524288.0  / 2 / PI
-
-
+//            262144.0 * 6 / 2 / PI, 262144.0 * 6 / 2 / PI, 262144.0 * 6 / 2 / PI,
+//            262144.0 * 6 / 2 / PI, 262144.0 * 6 / 2 / PI, 262144.0 * 6 / 2 / PI,
+//            262144.0 * 6 / 2 / PI, 262144.0 * 6 / 2 / PI, 262144.0 * 6 / 2 / PI,
+//            262144.0 * 6 / 2 / PI, 262144.0 * 6 / 2 / PI, 262144.0 * 6 / 2 / PI,
+            10000,10000
         };
         double max_pos[12]
         {
-            100000
+            10000
         };
         double min_pos[12]
         {
-            -100000
+           -10000
         };
         double max_vel[12]
         {
-           10000
+            330 / 60 * 2 * PI, 330 / 60 * 2 * PI,  330 / 60 * 2 * PI,
+            330 / 60 * 2 * PI, 330 / 60 * 2 * PI,  330 / 60 * 2 * PI,
+            330 / 60 * 2 * PI, 330 / 60 * 2 * PI,  330 / 60 * 2 * PI,
+            330 / 60 * 2 * PI, 330 / 60 * 2 * PI,  330 / 60 * 2 * PI,
         };
         double max_acc[12]
         {
-           1000
+            3000,  3000,  3000,
+            3000,  3000,  3000,
+            3000,  3000,  3000,
+            3000,  3000,  3000,
         };
 
         int phy_id[2]={0,1};
@@ -231,37 +226,32 @@ auto createControllerQuadruped()->std::unique_ptr<aris::control::Controller>
             "		<SyncManager is_tx=\"false\"/>"
             "		<SyncManager is_tx=\"true\"/>"
             "		<SyncManager is_tx=\"false\">"
-            "			<Pdo index=\"0x160\" is_tx=\"false\">"
-            "				<PdoEntry name=\"target_pos\" index=\"0x607A\" subindex=\"0x00\" size=\"32\"/>"
-            "				<PdoEntry name=\"target_vel\" index=\"0x60FF\" subindex=\"0x00\" size=\"32\"/>"
-            "				<PdoEntry name=\"targer_toq\" index=\"0x6071\" subindex=\"0x00\" size=\"16\"/>"
+            "			<Pdo index=\"0x1600\" is_tx=\"false\">"
             "				<PdoEntry name=\"control_word\" index=\"0x6040\" subindex=\"0x00\" size=\"16\"/>"
-
+            "				<PdoEntry name=\"mode_of_operation\" index=\"0x6060\" subindex=\"0x00\" size=\"8\"/>"
+            "				<PdoEntry name=\"target_pos\" index=\"0x607A\" subindex=\"0x00\" size=\"32\"/>"
+//            "				<PdoEntry name=\"target_vel\" index=\"0x60FF\" subindex=\"0x00\" size=\"32\"/>"
+//            "				<PdoEntry name=\"targer_toq\" index=\"0x6071\" subindex=\"0x00\" size=\"16\"/>"
+//            "				<PdoEntry name=\"max_toq\" index=\"0x6072\" subindex=\"0x00\" size=\"16\"/>"
 
             "			</Pdo>"
             "		</SyncManager>"
             "		<SyncManager is_tx=\"true\">"
             "			<Pdo index=\"0x1A00\" is_tx=\"true\">"
             "				<PdoEntry name=\"status_word\" index=\"0x6041\" subindex=\"0x00\" size=\"16\"/>"
- //           "				<PdoEntry name=\"mode_of_display\" index=\"0x6061\" subindex=\"0x00\" size=\"8\"/>"
+            "				<PdoEntry name=\"mode_of_display\" index=\"0x6061\" subindex=\"0x00\" size=\"8\"/>"
             "				<PdoEntry name=\"pos_actual_value\" index=\"0x6064\" subindex=\"0x00\" size=\"32\"/>"
-            "				<PdoEntry name=\"vel_actual_value\" index=\"0x606c\" subindex=\"0x00\" size=\"32\"/>"
-            "				<PdoEntry name=\"toq_actual_value\" index=\"0x6077\" subindex=\"0x00\" size=\"16\"/>"
-
+//            "				<PdoEntry name=\"vel_actual_value\" index=\"0x606c\" subindex=\"0x00\" size=\"32\"/>"
+//            "				<PdoEntry name=\"toq_actual_value\" index=\"0x6077\" subindex=\"0x00\" size=\"16\"/>"
             "			</Pdo>"
             "		</SyncManager>"
             "	</SyncManagerPoolObject>"
             "</EthercatMotor>";
 
 
-        auto& s = controller->slavePool().add<aris::control::EthercatMotor>();
-        aris::core::fromXmlString(s, xml_str);
-//                auto& motor = controller->slavePool().add<aris::control::EthercatSlave>();
-//                motor.scanInfoForCurrentSlave();
-//                motor.scanPdoForCurrentSlave();
 
-
-
+       auto& s = controller->slavePool().add<aris::control::EthercatMotor>();
+               aris::core::fromXmlString(s, xml_str);
 #ifdef WIN32
         dynamic_cast<aris::control::EthercatMotor&>(controller->slavePool().back()).setVirtual(true);
 #endif
@@ -271,14 +261,11 @@ auto createControllerQuadruped()->std::unique_ptr<aris::control::Controller>
 #endif
 
 
-
-        dynamic_cast<aris::control::EthercatMotor&>(controller->slavePool().back()).setDcAssignActivate(0x300);
-        dynamic_cast<aris::control::EthercatMotor&>(controller->slavePool().back()).setControlWord(0x00);
-        dynamic_cast<aris::control::EthercatMotor&>(controller->slavePool().back()).setModeOfOperation(0x08);
-        dynamic_cast<aris::control::EthercatMotor&>(controller->slavePool().back()).setTargetPos(0.0);
     };
     return controller;
 }
+
+
 auto createPlanQuadruped()->std::unique_ptr<aris::plan::PlanRoot>
 {
     std::unique_ptr<aris::plan::PlanRoot> plan_root(new aris::plan::PlanRoot);
