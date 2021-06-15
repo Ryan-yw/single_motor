@@ -7,6 +7,27 @@
 namespace robot
 {
 
+    class SetMaxToq : public aris::core::CloneObject<SetMaxToq, aris::plan::Plan>
+    {
+    public:
+        auto virtual prepareNrt()->void;
+        auto virtual executeRT()->int;
+        auto virtual collectNrt()->void;
+
+        virtual ~SetMaxToq();
+        explicit SetMaxToq(const std::string &name = "set_max_toq");
+    };
+
+    class ReadJoint :public aris::core::CloneObject<ReadJoint, aris::plan::Plan>
+    {
+    public:
+        auto virtual prepareNrt()->void;
+        auto virtual executeRT()->int;
+
+        virtual ~ReadJoint();
+        explicit ReadJoint(const std::string &name = "dog_read_joint");
+    };
+
     // 正弦曲线 //
     class MoveJS : public aris::core::CloneObject<MoveJS, aris::plan::Plan>
     {
@@ -19,7 +40,7 @@ namespace robot
 
     };
     
-    //
+    //move joint pos
     class MoveJoint : public aris::core::CloneObject<MoveJoint, aris::plan::Plan>
     {
     public:
@@ -32,6 +53,18 @@ namespace robot
         double dir_;
     };
 
+    //torque control
+    class MoveTorque :public aris::core::CloneObject<MoveTorque, aris::plan::Plan>
+    {
+    public:
+        auto virtual prepareNrt()->void;
+        auto virtual executeRT()->int;
+
+        virtual ~MoveTorque();
+        explicit MoveTorque(const std::string &name = "move_torque");
+    private:
+        double dir_;
+    };
 
 
     auto createControllerQuadruped()->std::unique_ptr<aris::control::Controller>;
