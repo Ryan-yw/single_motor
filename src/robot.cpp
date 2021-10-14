@@ -227,7 +227,7 @@ auto MoveTorque::executeRT()->int
 
 
     static double begin_angle;
-
+    static int i=0;
     // read toeque //
     std::int16_t torque=0;
     this->ecController()->motionPool()[0].readPdo(0x6077,0x00,torque);
@@ -261,7 +261,7 @@ auto createControllerQuadruped()->std::unique_ptr<aris::control::Controller>
 #else
         double pos_offset[2]
         {
-            -20379.3
+            9.26406
         };
 #endif
         double pos_factor[2]
@@ -293,39 +293,74 @@ auto createControllerQuadruped()->std::unique_ptr<aris::control::Controller>
 
         int phy_id[12]={0,1};
 
+        //elmo
+//        std::string xml_str =
+//           "<EthercatMotor phy_id=\"" + std::to_string(phy_id[i]) + "\" product_code=\"0x00\""
+//           " vendor_id=\"0x00\" revision_num=\"0x00\" dc_assign_activate=\"0x0300\""
+//           " min_pos=\"" + std::to_string(min_pos[i]) + "\" max_pos=\"" + std::to_string(max_pos[i]) + "\" max_vel=\"" + std::to_string(max_vel[i]) + "\" min_vel=\"" + std::to_string(-max_vel[i]) + "\""
+//           " max_acc=\"" + std::to_string(max_acc[i]) + "\" min_acc=\"" + std::to_string(-max_acc[i]) + "\" max_pos_following_error=\"10.0\" max_vel_following_error=\"20.0\""
+//           " home_pos=\"0\" pos_factor=\"" + std::to_string(pos_factor[i]) + "\" pos_offset=\"" + std::to_string(pos_offset[i]) + "\">"
+//           "	<SyncManagerPoolObject>"
+//           "		<SyncManager is_tx=\"false\"/>"
+//           "		<SyncManager is_tx=\"true\"/>"
+//           "		<SyncManager is_tx=\"false\">"
+//           "			<Pdo index=\"0x1605\" is_tx=\"false\">"
+//           "				<PdoEntry name=\"target_pos\" index=\"0x607A\" subindex=\"0x00\" size=\"32\"/>"
+//           "				<PdoEntry name=\"target_vel\" index=\"0x60FF\" subindex=\"0x00\" size=\"32\"/>"
+//           "				<PdoEntry name=\"targer_toq\" index=\"0x6071\" subindex=\"0x00\" size=\"16\"/>"
+//           "				<PdoEntry name=\"max_toq\" index=\"0x6072\" subindex=\"0x00\" size=\"16\"/>"
+//           "				<PdoEntry name=\"control_word\" index=\"0x6040\" subindex=\"0x00\" size=\"16\"/>"
+//           "				<PdoEntry name=\"mode_of_operation\" index=\"0x6060\" subindex=\"0x00\" size=\"8\"/>"
+//           "			</Pdo>"
+//           "		</SyncManager>"
+//           "		<SyncManager is_tx=\"true\">"
+//           "			<Pdo index=\"0x1A07\" is_tx=\"true\">"
+//           "				<PdoEntry name=\"status_word\" index=\"0x6041\" subindex=\"0x00\" size=\"16\"/>"
+//           "				<PdoEntry name=\"mode_of_display\" index=\"0x6061\" subindex=\"0x00\" size=\"8\"/>"
+//           "				<PdoEntry name=\"pos_actual_value\" index=\"0x6064\" subindex=\"0x00\" size=\"32\"/>"
+//           "				<PdoEntry name=\"vel_actual_value\" index=\"0x606c\" subindex=\"0x00\" size=\"32\"/>"
+//           "				<PdoEntry name=\"toq_actual_value\" index=\"0x6077\" subindex=\"0x00\" size=\"16\"/>"
+//           "			</Pdo>"
+//           "		</SyncManager>"
+//           "	</SyncManagerPoolObject>"
+//           "</EthercatMotor>";
 
+
+
+        //zero_err
         std::string xml_str =
-           "<EthercatMotor phy_id=\"" + std::to_string(phy_id[i]) + "\" product_code=\"0x00\""
-           " vendor_id=\"0x00\" revision_num=\"0x00\" dc_assign_activate=\"0x0300\""
-           " min_pos=\"" + std::to_string(min_pos[i]) + "\" max_pos=\"" + std::to_string(max_pos[i]) + "\" max_vel=\"" + std::to_string(max_vel[i]) + "\" min_vel=\"" + std::to_string(-max_vel[i]) + "\""
-           " max_acc=\"" + std::to_string(max_acc[i]) + "\" min_acc=\"" + std::to_string(-max_acc[i]) + "\" max_pos_following_error=\"10.0\" max_vel_following_error=\"20.0\""
-           " home_pos=\"0\" pos_factor=\"" + std::to_string(pos_factor[i]) + "\" pos_offset=\"" + std::to_string(pos_offset[i]) + "\">"
-           "	<SyncManagerPoolObject>"
-           "		<SyncManager is_tx=\"false\"/>"
-           "		<SyncManager is_tx=\"true\"/>"
-           "		<SyncManager is_tx=\"false\">"
-           "			<Pdo index=\"0x1605\" is_tx=\"false\">"
-           "				<PdoEntry name=\"target_pos\" index=\"0x607A\" subindex=\"0x00\" size=\"32\"/>"
-           "				<PdoEntry name=\"target_vel\" index=\"0x60FF\" subindex=\"0x00\" size=\"32\"/>"
-           "				<PdoEntry name=\"targer_toq\" index=\"0x6071\" subindex=\"0x00\" size=\"16\"/>"
-           "				<PdoEntry name=\"max_toq\" index=\"0x6072\" subindex=\"0x00\" size=\"16\"/>"
-           "				<PdoEntry name=\"control_word\" index=\"0x6040\" subindex=\"0x00\" size=\"16\"/>"
-           "				<PdoEntry name=\"mode_of_operation\" index=\"0x6060\" subindex=\"0x00\" size=\"8\"/>"
-           "			</Pdo>"
-           "		</SyncManager>"
-           "		<SyncManager is_tx=\"true\">"
-           "			<Pdo index=\"0x1A07\" is_tx=\"true\">"
-           "				<PdoEntry name=\"status_word\" index=\"0x6041\" subindex=\"0x00\" size=\"16\"/>"
-           "				<PdoEntry name=\"mode_of_display\" index=\"0x6061\" subindex=\"0x00\" size=\"8\"/>"
-           "				<PdoEntry name=\"pos_actual_value\" index=\"0x6064\" subindex=\"0x00\" size=\"32\"/>"
-           "				<PdoEntry name=\"vel_actual_value\" index=\"0x606c\" subindex=\"0x00\" size=\"32\"/>"
-           "				<PdoEntry name=\"toq_actual_value\" index=\"0x6077\" subindex=\"0x00\" size=\"16\"/>"
-           "			</Pdo>"
-           "		</SyncManager>"
-           "	</SyncManagerPoolObject>"
-           "</EthercatMotor>";
-
-
+            "<EthercatMotor phy_id=\"" + std::to_string(phy_id[i]) + "\" product_code=\"0x00\""
+            " vendor_id=\"0x00\" revision_num=\"0x00\" dc_assign_activate=\"0x0300\""
+            " min_pos=\"" + std::to_string(min_pos[i]) + "\" max_pos=\"" + std::to_string(max_pos[i]) + "\" max_vel=\"" + std::to_string(max_vel[i]) + "\" min_vel=\"" + std::to_string(-max_vel[i]) + "\""
+            " max_acc=\"" + std::to_string(max_acc[i]) + "\" min_acc=\"" + std::to_string(-max_acc[i]) + "\" max_pos_following_error=\"10.0\" max_vel_following_error=\"20.0\""
+            " home_pos=\"0\" pos_factor=\"" + std::to_string(pos_factor[i]) + "\" pos_offset=\"" + std::to_string(pos_offset[i]) + "\">"
+            "	<SyncManagerPoolObject>"
+            "		<SyncManager is_tx=\"false\"/>"
+            "		<SyncManager is_tx=\"true\"/>"
+            "		<SyncManager is_tx=\"false\">"
+            "			<Pdo index=\"0x1608\" is_tx=\"false\">"
+            "				<PdoEntry name=\"controlword\" index=\"0x6040\" subindex=\"0x00\" size=\"16\"/>"
+            "				<PdoEntry name=\"targer_toq\" index=\"0x6071\" subindex=\"0x00\" size=\"16\"/>"
+            "				<PdoEntry name=\"targer_pos\" index=\"0x607A\" subindex=\"0x00\" size=\"32\"/>"
+            "				<PdoEntry name=\"max_motor_speed\" index=\"0x6080\" subindex=\"0x00\" size=\"32\"/>"
+            "				<PdoEntry name=\"target_vel\" index=\"0x60FF\" subindex=\"0x00\" size=\"32\"/>"
+            "				<PdoEntry name=\"target_vel\" index=\"0x6060\" subindex=\"0x00\" size=\"8\"/>"
+            "               <PdoEntry name=\"dummy_type\" index=\"0\" subindex=\"0\" size=\"8\"/>"
+            "			</Pdo>"
+            "		</SyncManager>"
+            "		<SyncManager is_tx=\"true\">"
+            "			<Pdo index=\"0x1a06\" is_tx=\"true\">"
+            "				<PdoEntry name=\"error_code\" index=\"0x603f\" subindex=\"0x00\" size=\"16\"/>"
+            "				<PdoEntry name=\"statusword\" index=\"0x6041\" subindex=\"0x00\" size=\"16\"/>"
+            "				<PdoEntry name=\"pos_actual_value\" index=\"0x6064\" subindex=\"0x00\" size=\"32\"/>"
+            "				<PdoEntry name=\"vel_actual_value\" index=\"0x606c\" subindex=\"0x00\" size=\"32\"/>"
+            "				<PdoEntry name=\"toq_actual_value\" index=\"0x6077\" subindex=\"0x00\" size=\"16\"/>"
+            "				<PdoEntry name=\"mode_operation\" index=\"0x6061\" subindex=\"0x00\" size=\"8\"/>"
+            "				<PdoEntry name=\"dummy_type\" index=\"0\" subindex=\"0\" size=\"8\"/>"
+            "			</Pdo>"
+            "		</SyncManager>"
+            "	</SyncManagerPoolObject>"
+            "</EthercatMotor>";
 
        auto& s = controller->slavePool().add<aris::control::EthercatMotor>();
                aris::core::fromXmlString(s, xml_str);
