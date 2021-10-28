@@ -1,9 +1,13 @@
 ﻿cmake_minimum_required(VERSION 3.12)
 
-project(testmotor)
+project(SingleMotor)
 
 # aris use c++ 17 standard
 set(CMAKE_CXX_STANDARD 17)
+
+
+include_directories("./lcm")
+include_directories("./include")
 
 # find aris
 if(UNIX)
@@ -16,12 +20,13 @@ endif(WIN32)
 include_directories(${aris_INCLUDE_DIRS})
 
 
-add_executable(testmotor src/main.cpp src/robot.cpp src/robot.h src/plan.cpp src/plan.h )
+add_executable(single_motor src/main.cpp src/robot.cpp src/plan.cpp src/imu.cpp src/spline.cpp )
 
 if(UNIX)
-    target_link_libraries(testmotor ${aris_LIBRARIES} atomic)
+    target_link_libraries(single_motor ${aris_LIBRARIES} atomic)
 endif(UNIX)
 IF(WIN32)
-    target_link_libraries(testmotor ${aris_LIBRARIES})
+    target_link_libraries(single_motor ${aris_LIBRARIES})
 endif(WIN32)
 
+target_link_libraries(single_motor lcm)

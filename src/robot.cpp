@@ -10,8 +10,31 @@
 using namespace aris::dynamic;
 using namespace aris::plan;
 const double PI = aris::PI;
+
+std::atomic<float> body_pos_[6];
 namespace robot
 {
+    static RobotDataProcess data;
+
+RobotDataProcess::RobotDataProcess()
+{
+    this->lcm_robot_estimator_.subscribe("state_estimator",&RobotDataProcess::dataProcess,this);
+    this->estimator_data_robot_thread_ = std::thread([&](){ while(true){ lcm_robot_estimator_.handle(); } });
+}
+auto RobotDataProcess::dataProcess(const lcm::ReceiveBuffer *rbuf,const std::string &chan,const state_estimator_lcmt *msg)->void
+{
+    body_pos_[0]= msg->p[0];
+    body_pos_[1]= msg->p[1];
+    body_pos_[2]= msg->p[2];
+    body_pos_[3]= msg->rpy[0];
+    body_pos_[4]= msg->rpy[1];
+    body_pos_[5]= msg->rpy[2];
+    //std::cout << body_pos_[0] << "\t" << body_pos_[1] << "\t" << body_pos_[2] << std::endl;
+}
+
+
+
+
 //设置力矩
 auto SetMaxToq::prepareNrt()->void
 {
@@ -233,7 +256,7 @@ auto MoveTorque::executeRT()->int
     this->ecController()->motionPool()[0].readPdo(0x6077,0x00,torque);
     mout()<< torque <<std::endl;
 
-    controller()->motionPool()[0].setTargetToq(18);
+    controller()->motionPool()[0].setTargetToq(15);
     return 1;
 
 }
@@ -245,6 +268,30 @@ MoveTorque::MoveTorque(const std::string &name)
         "</Command>");
 }
 MoveTorque::~MoveTorque() = default;
+
+// muli-thread communication //
+auto TestThread::prepareNrt()->void
+{
+    dir_ = doubleParam("direction");
+    for(auto &m:motorOptions()) m = aris::plan::Plan::NOT_CHECK_ENABLE;
+}
+auto TestThread::executeRT()->int
+{
+
+    //std::cout << "11111111111111111111111111" << std::endl;
+   std::cout << body_pos_[0] << "\t" << body_pos_[1] << "\t" << body_pos_[2] << std::endl;
+    return 1;
+
+}
+
+TestThread::TestThread(const std::string &name)
+{
+    aris::core::fromXmlString(command(),
+       "<Command name=\"test_th\">"
+        "<Param name=\"direction\" default=\"1\" abbreviation=\"d\"/>"
+        "</Command>");
+}
+TestThread::~TestThread() = default;
 
 
 auto createControllerQuadruped()->std::unique_ptr<aris::control::Controller>
@@ -261,16 +308,18 @@ auto createControllerQuadruped()->std::unique_ptr<aris::control::Controller>
 #else
         double pos_offset[2]
         {
-            -20379.3
+            281.64
+
+
         };
 #endif
         double pos_factor[2]
         {
-            16384.0 *20 / 2 / PI
+            16384.0 * 6.4 / 2 / PI
         };
         double max_pos[12]
         {
-            10000
+            100000
         };
         double min_pos[12]
         {
@@ -293,7 +342,7 @@ auto createControllerQuadruped()->std::unique_ptr<aris::control::Controller>
 
         int phy_id[12]={0,1};
 
-
+/*-------------------------------------------------------elmo------------------------------------------------------*/
         std::string xml_str =
            "<EthercatMotor phy_id=\"" + std::to_string(phy_id[i]) + "\" product_code=\"0x00\""
            " vendor_id=\"0x00\" revision_num=\"0x00\" dc_assign_activate=\"0x0300\""
@@ -374,6 +423,7 @@ auto createPlanQuadruped()->std::unique_ptr<aris::plan::PlanRoot>
     plan_root->planPool().add<MoveJoint>();
     plan_root->planPool().add<MoveTorque>();
     plan_root->planPool().add<ReadJoint>();
+    plan_root->planPool().add<TestThread>();
     return plan_root;
 }
 
