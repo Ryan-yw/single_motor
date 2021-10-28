@@ -56,21 +56,6 @@ struct Gravity
     double quaternion[4];
 };
 
-void inline data2acc(const Data* data, Acc * acc)
-{
-    acc->x_acc = data->x_acc;
-    acc->y_acc = data->y_acc;
-    acc->z_acc = data->z_acc;
-}
-
-void inline data2ori(const Data* data, Orientation* ori)
-{
-    ori->yaw = data->yaw;
-    ori->roll = data->roll;
-    ori->pitch = data->pitch;
-}
-
-
 static Data data;
 
 Data getCurrentData();
@@ -80,25 +65,6 @@ int initIMU();
 int closeIMU();
 
 int startIMU();
-
-using MsgSize = std::uint32_t;
-using MsgID = std::uint32_t;
-using MsgType = std::uint64_t;
-
-
-/** @brief exclude the effect of gravity
- * @param acc
- * @param g
- * 
- * 
- */
-//void gravity_calib(const Gravity& g, const Acc& acc, const Ori* ori, Acc*result );
-//void gravity_calib(const Data* data);
-///** @brief
-// * @param
-// * @param
-// */
-//void cal_pos(const Acc* acc, const Orientation* ori, double* )
 
 
 

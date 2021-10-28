@@ -6,7 +6,7 @@
 #include <iostream>
 #include <stdio.h>
 
-#include "spline.h"
+#include "./include/spline.h"
 
 namespace spline
 {

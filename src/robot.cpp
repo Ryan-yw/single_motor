@@ -4,8 +4,8 @@
 #include <string>
 #include <bitset>
 
-#include "robot.h"
-#include"plan.h"
+#include "./include/robot.h"
+#include"./include/plan.h"
 
 using namespace aris::dynamic;
 using namespace aris::plan;

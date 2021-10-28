@@ -2,7 +2,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <termios.h>
-#include "imu.h"
+#include "./include/imu.h"
 
 namespace imu{
 
