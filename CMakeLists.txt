@@ -9,6 +9,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
+
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
@@ -18,13 +19,15 @@ set(CMAKE_AUTORCC ON)
 if (WIN32)
 set(Qt5Core_DIR C:/Qt/5.15.2/msvc2019_64/lib/cmake/Qt5Core)
 set(Qt5Widgets_DIR C:/Qt/5.15.2/msvc2019_64/lib/cmake/Qt5Widgets)
-set(Qt5Gamepad_DIR C:/Qt/5.15.2/msvc2019_64/lib/cmake/Qt5Gui)
+set(Qt5Gui_DIR C:/Qt/5.15.2/msvc2019_64/lib/cmake/Qt5Gui)
+set(Qt5Gamepad_DIR C:/Qt/5.15.2/msvc2019_64/lib/cmake/Qt5Gamepad)
 set(Qt5PrintSupport_DIR C:/Qt/5.15.2/msvc2019_64/lib/cmake/Qt5PrintSupport)
 endif(WIN32)
+
 if (UNIX)
 set(Qt5Core_DIR /opt/Qt5.11.2/5.11.2/gcc_64/lib/cmake/Qt5Core)
 set(Qt5Widgets_DIR /opt/Qt5.11.2/5.11.2/gcc_64/lib/cmake/Qt5Widgets)
-set(Qt5Gamepad_DIR /opt/Qt5.11.2/5.11.2/gcc_64/lib/cmake/Qt5Gui)
+set(Qt5Qt5Gui_DIR /opt/Qt5.11.2/5.11.2/gcc_64/lib/cmake/Qt5Gui)
 set(Qt5Gamepad_DIR /opt/Qt5.11.2/5.11.HEADER2/gcc_64/lib/cmake/Qt5Gamepad)
 set(Qt5PrintSupport_DIR /opt/Qt5.11.2/5.11.2/gcc_64/lib/cmake/Qt5PrintSupport)
 endif(UNIX)
@@ -33,7 +36,7 @@ find_package(Qt5Core CONFIG REQUIRED)
 find_package(Qt5Widgets CONFIG REQUIRED)
 find_package(Qt5Gui CONFIG REQUIRED)
 find_package(Qt5PrintSupport REQUIRED)
-
+find_package(Qt5Gamepad REQUIRED)
 # find aris
 if(UNIX)
         add_definitions(-DUNIX)
@@ -46,38 +49,30 @@ endif(WIN32)
 
 include_directories(${aris_INCLUDE_DIRS})
 include_directories("./lcm")
-include_directories(${PROJECT_SOURCE_DIR}/include)
+include_directories("./include")
+include_directories("./plot/include")
 
-set(PROJECT_UI
-    src/mainwindow.ui
+file(GLOB HEADERS
+    include/*.h
+    plot/include/*.h
 )
-set(PROJECT_SOURCES
-        src/main.cpp
-        src/mainwindow.cpp
-        src/qcustomplot.cpp
-        src/axistag.cpp
-        src/robot.cpp
-        src/plan.cpp
-        src/imu.cpp
-        src/spline.cpp
-        ${PROJECT_UI}
-)
-set(PROJECT_HEADER
-    include/qcustomplot.h
-    include/mainwindow.h
-    include/axistag.h
-    include/robot.h
-    include/plan.h
-    include/imu.h
-    include/spline.h
+file(GLOB SOURCES
+    src/*.cpp
+    src/*.ui
+
+    plot/src/*.cpp
+    plot/src/*.ui
+    ${HEADERS}
 )
 
 
 
 
-add_executable(${PROJECT_NAME} ${PROJECT_SOURCES} ${PROJECT_HEADER})
 
-target_link_libraries(${PROJECT_NAME} Qt5::Core Qt5::Gui Qt5::Widgets Qt5::PrintSupport)
+
+add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
+
+target_link_libraries(${PROJECT_NAME}  Qt5::Core Qt5::Gui Qt5::Widgets Qt5::PrintSupport Qt5::Gamepad)
 target_link_libraries(${PROJECT_NAME} lcm)
 if(UNIX)
     target_link_libraries(${PROJECT_NAME} ${aris_LIBRARIES} atomic)

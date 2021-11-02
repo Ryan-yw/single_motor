@@ -1,0 +1,34 @@
+# Meta
+set(AM_MULTI_CONFIG "FALSE")
+set(AM_PARALLEL "2")
+# Directories
+set(AM_CMAKE_SOURCE_DIR "/home/kaanh5/Desktop/single_motor")
+set(AM_CMAKE_BINARY_DIR "/home/kaanh5/Desktop/single_motor/build")
+set(AM_CMAKE_CURRENT_SOURCE_DIR "/home/kaanh5/Desktop/single_motor")
+set(AM_CMAKE_CURRENT_BINARY_DIR "/home/kaanh5/Desktop/single_motor/build")
+set(AM_CMAKE_INCLUDE_DIRECTORIES_PROJECT_BEFORE "")
+set(AM_BUILD_DIR "/home/kaanh5/Desktop/single_motor/build/SingleMotor_autogen")
+set(AM_INCLUDE_DIR "include")
+# Files
+set(AM_SOURCES "/home/kaanh5/Desktop/single_motor/src/axistag.cpp;/home/kaanh5/Desktop/single_motor/src/imu.cpp;/home/kaanh5/Desktop/single_motor/src/main.cpp;/home/kaanh5/Desktop/single_motor/src/mainwindow.cpp;/home/kaanh5/Desktop/single_motor/src/plan.cpp;/home/kaanh5/Desktop/single_motor/src/qcustomplot.cpp;/home/kaanh5/Desktop/single_motor/src/robot.cpp;/home/kaanh5/Desktop/single_motor/src/spline.cpp")
+set(AM_HEADERS "/home/kaanh5/Desktop/single_motor/include/axistag.h;/home/kaanh5/Desktop/single_motor/include/imu.h;/home/kaanh5/Desktop/single_motor/include/mainwindow.h;/home/kaanh5/Desktop/single_motor/include/plan.h;/home/kaanh5/Desktop/single_motor/include/qcustomplot.h;/home/kaanh5/Desktop/single_motor/include/robot.h;/home/kaanh5/Desktop/single_motor/include/spline.h")
+set(AM_SETTINGS_FILE "/home/kaanh5/Desktop/single_motor/build/CMakeFiles/SingleMotor_autogen.dir/AutogenOldSettings.txt")
+# Qt
+set(AM_QT_VERSION_MAJOR "5")
+set(AM_QT_MOC_EXECUTABLE "/opt/Qt5.11.2/5.11.2/gcc_64/bin/moc")
+set(AM_QT_UIC_EXECUTABLE "/opt/Qt5.11.2/5.11.2/gcc_64/bin/uic")
+# MOC settings
+set(AM_MOC_SKIP "/home/kaanh5/Desktop/single_motor/build/SingleMotor_autogen/mocs_compilation.cpp")
+set(AM_MOC_DEFINITIONS "QT_CORE_LIB;QT_GUI_LIB;QT_NO_DEBUG;QT_PRINTSUPPORT_LIB;QT_WIDGETS_LIB;UNIX")
+set(AM_MOC_INCLUDES "/home/kaanh5/Desktop/single_motor/build;/home/kaanh5/Desktop/single_motor;/home/kaanh5/Desktop/single_motor/build/SingleMotor_autogen/include;/home/kaanh5/Desktop/single_motor/./lcm;/home/kaanh5/Desktop/single_motor/include;/usr/aris/aris-1.5.0/include;/opt/Qt5.11.2/5.11.2/gcc_64/include;/opt/Qt5.11.2/5.11.2/gcc_64/include/QtCore;/opt/Qt5.11.2/5.11.2/gcc_64/./mkspecs/linux-g++;/opt/Qt5.11.2/5.11.2/gcc_64/include/QtGui;/opt/Qt5.11.2/5.11.2/gcc_64/include/QtWidgets;/opt/Qt5.11.2/5.11.2/gcc_64/include/QtPrintSupport;/usr/include")
+set(AM_MOC_OPTIONS "")
+set(AM_MOC_RELAXED_MODE "")
+set(AM_MOC_MACRO_NAMES "Q_OBJECT;Q_GADGET;Q_NAMESPACE")
+set(AM_MOC_DEPEND_FILTERS "")
+set(AM_MOC_PREDEFS_CMD "/usr/bin/c++;-dM;-E;-c;/usr/cmake-3.12.3-Linux-x86_64/share/cmake-3.12/Modules/CMakeCXXCompilerABI.cpp")
+# UIC settings
+set(AM_UIC_SKIP "/home/kaanh5/Desktop/single_motor/build/SingleMotor_autogen/mocs_compilation.cpp")
+set(AM_UIC_TARGET_OPTIONS "")
+set(AM_UIC_OPTIONS_FILES "")
+set(AM_UIC_OPTIONS_OPTIONS "")
+set(AM_UIC_SEARCH_PATHS "")

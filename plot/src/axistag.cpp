@@ -23,7 +23,7 @@
 **          Version: 2.1.0                                                **
 ****************************************************************************/
 
-#include "./include/axistag.h"
+#include "./plot/include/axistag.h"
 
 AxisTag::AxisTag(QCPAxis *parentAxis) :
   QObject(parentAxis),

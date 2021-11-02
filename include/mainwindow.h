@@ -27,10 +27,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "qcustomplot.h"
-#include "axistag.h"
 
-
+#include "GamepadCommand.h"
+#include "GameController.h"
 
 
 namespace Ui {
@@ -46,18 +45,18 @@ public:
   ~MainWindow();
   
 private slots:
-  void timerSlot();
-  
+
+  void on_btn_game_pad();
+  void on_btn_plot();
 private:
   Ui::MainWindow *ui;
-  QCustomPlot *mPlot;
-  QPointer<QCPGraph> mGraph1;
-  QPointer<QCPGraph> mGraph2;
-  QPointer<QCPGraph> mGraph3;
-  AxisTag *mTag1;
-  AxisTag *mTag2;
-  AxisTag *mTag3;
-  QTimer mDataTimer;
+
+  // joy stick //
+  GameController gameController_;
+  GamepadCommand driverCommand_;
+
+
+
 };
 
 

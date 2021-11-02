@@ -1,0 +1,4 @@
+/home/kaanh5/Desktop/single_motor/build/CMakeFiles/rebuild_cache.dir
+/home/kaanh5/Desktop/single_motor/build/CMakeFiles/edit_cache.dir
+/home/kaanh5/Desktop/single_motor/build/CMakeFiles/SingleMotor.dir
+/home/kaanh5/Desktop/single_motor/build/CMakeFiles/SingleMotor_autogen.dir
